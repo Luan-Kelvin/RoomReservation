@@ -38,7 +38,7 @@ public class User {
     @Email(message = "ERRO! Formato de email inválido para cadastro.")
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reserve> reserves = new ArrayList<>();
 
     public User(String name, String cpf, Integer age, String email) {
@@ -55,5 +55,12 @@ public class User {
         }
 
         reserves.add(reserve);
+    }
+
+    // REMOVER RESERVA
+    public void removeReserve(Reserve reserve){
+        if (reserves.contains(reserve)) {
+            reserves.remove(reserve);
+        }
     }
 }
