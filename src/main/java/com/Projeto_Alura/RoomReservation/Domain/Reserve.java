@@ -30,10 +30,10 @@ public class Reserve {
     @Enumerated(EnumType.STRING)
     private StatusReserve status;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Room room;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_User")
     private User user;
 

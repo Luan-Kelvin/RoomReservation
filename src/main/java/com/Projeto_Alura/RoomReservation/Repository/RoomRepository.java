@@ -14,7 +14,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query(value = "SELECT nextval('number_room_seq');", nativeQuery = true)
     Integer generateNewRoomNumber();
 
-    Optional<Room> findByNumber(String number);
+    Optional<Room> findByNumber(Integer number);
 
     List<Room> findByCreationDate(LocalDate creationDate);
 

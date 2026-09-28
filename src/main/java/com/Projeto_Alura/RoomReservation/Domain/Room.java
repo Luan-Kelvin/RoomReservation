@@ -45,4 +45,8 @@ public class Room {
             this.reserve = reserve;
         }
     }
+
+    public void removeReserve(){
+        this.reserve = null;
+    }
 }
