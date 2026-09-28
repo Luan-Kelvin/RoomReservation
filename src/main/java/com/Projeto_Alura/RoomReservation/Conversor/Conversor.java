@@ -21,6 +21,7 @@ public class Conversor {
 
     public UserGetDTO converterUser(User user){
         return new UserGetDTO(
+                user.getId(),
                 user.getName(),
                 user.getAge(),
                 user.getEmail()

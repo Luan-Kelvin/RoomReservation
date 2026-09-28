@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,9 +32,22 @@ public class UserService {
     }
 
     @Transactional
-    public User findById(Long id){
-        return  userRepository.findById(id)
+    public List<UserGetDTO> listUser(){
+        List<User> users = userRepository.findAll();
+
+        if (users.isEmpty()){
+            return List.of();
+        }
+
+        return users.stream().map(conversor::converterUser).toList();
+    }
+
+    @Transactional
+    public UserGetDTO findByIdController(Long id){
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(String.format("ERRO! Usuário com ID %s não foi encontrado.", id)));
+
+        return conversor.converterUser(user);
     }
 
     @Transactional
@@ -63,4 +77,11 @@ public class UserService {
     public void save(User user){
         userRepository.save(user);
     }
+
+    @Transactional
+    public User findById(Long id){
+        return  userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(String.format("ERRO! Usuário com ID %s não foi encontrado.", id)));
+    }
+
 }
