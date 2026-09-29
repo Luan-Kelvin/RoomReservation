@@ -13,6 +13,7 @@ public class Conversor {
 
     public RoomGetDTO converterRoom(Room room){
         return new RoomGetDTO(
+                room.getId(),
                 room.getNumber(),
                 room.getCreationDate(),
                 room.getStatus()
