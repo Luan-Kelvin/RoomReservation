@@ -13,6 +13,7 @@ public class Conversor {
 
     public RoomGetDTO converterRoom(Room room){
         return new RoomGetDTO(
+                room.getId(),
                 room.getNumber(),
                 room.getCreationDate(),
                 room.getStatus()
@@ -21,6 +22,7 @@ public class Conversor {
 
     public UserGetDTO converterUser(User user){
         return new UserGetDTO(
+                user.getId(),
                 user.getName(),
                 user.getAge(),
                 user.getEmail()
@@ -29,6 +31,7 @@ public class Conversor {
 
     public ReserveGetDTO converterReserve(Reserve reserve){
         return new ReserveGetDTO(
+            reserve.getId(),
             reserve.getNumber(),
             reserve.getStartReservation(),
             reserve.getEndReservation(),

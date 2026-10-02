@@ -5,6 +5,7 @@ import com.Projeto_Alura.RoomReservation.DTOs.Room.RoomGetDTO;
 import com.Projeto_Alura.RoomReservation.Domain.Room;
 import com.Projeto_Alura.RoomReservation.ENUM.StatusRoom;
 import com.Projeto_Alura.RoomReservation.Exceptions.Room.RoomNotFoundException;
+import com.Projeto_Alura.RoomReservation.Exceptions.Room.StatusInvalidException;
 import com.Projeto_Alura.RoomReservation.Repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -48,6 +49,24 @@ public class RoomService {
 
     }
 
+    public RoomGetDTO findByIdController(Long id){
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RoomNotFoundException(String.format("ERRO! Sala com ID %s não foi encontrada.", id)));
+
+        return  conversor.converterRoom(room);
+    }
+
+    @Transactional
+    public List<RoomGetDTO> listRoons(){
+        List<Room> roons = roomRepository.findAll();
+
+        if (roons.isEmpty()){
+            return List.of();
+        }
+
+        return roons.stream().map(conversor::converterRoom).toList();
+    }
+
     @Transactional
     public RoomGetDTO findByNumber(Integer number){
         Room room = roomRepository.findByNumber(number)
@@ -79,7 +98,19 @@ public class RoomService {
     }
 
     @Transactional
-    public List<RoomGetDTO> findByStatus(StatusRoom status){
+    public List<RoomGetDTO> findByStatus(String s){
+        StatusRoom status = null;
+
+        if (s.equalsIgnoreCase("AVAILABLE")){
+            status = StatusRoom.AVAILABLE;
+        } else if (s.equalsIgnoreCase("RESERVED")){
+            status = StatusRoom.RESERVED;
+        } else if (s.equalsIgnoreCase("UNAVAILABLE")){
+            status = StatusRoom.UNAVAILABLE;
+        }else {
+            throw new StatusInvalidException("ERRO! Status digitado é inválido.");
+        }
+
         List<Room> roons = roomRepository.findByStatus(status);
 
         if (roons.isEmpty()){
