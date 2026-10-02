@@ -9,6 +9,7 @@ import com.Projeto_Alura.RoomReservation.Domain.User;
 import com.Projeto_Alura.RoomReservation.ENUM.StatusReserve;
 import com.Projeto_Alura.RoomReservation.Exceptions.Reserve.ReserveNotFoundException;
 import com.Projeto_Alura.RoomReservation.Exceptions.Reserve.TheRoomAlreadyReservedException;
+import com.Projeto_Alura.RoomReservation.Exceptions.Room.StatusInvalidException;
 import com.Projeto_Alura.RoomReservation.Repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class ReserveService {
     }
 
     @Transactional
-    private void deleteReserve(Integer number){
+    public void deleteReserve(Integer number){
         Reserve reserve = reserveRepository.findByNumber(number)
                 .orElseThrow(() -> new ReserveNotFoundException(String.format("ERRO! Reserva com Nº %s não foi encontrada.", number)));
 
@@ -67,6 +68,14 @@ public class ReserveService {
 
         userService.save(user);
         roomService.save(room);
+    }
+
+    @Transactional
+    public ReserveGetDTO findById(Long id){
+        Reserve reserve = reserveRepository.findById(id)
+                .orElseThrow(() -> new ReserveNotFoundException(String.format("ERRO! ID %s não foi encontrado.", id)));
+
+        return conversor.converterReserve(reserve);
     }
 
     @Transactional
@@ -89,8 +98,17 @@ public class ReserveService {
     }
 
     @Transactional
-    public List<ReserveGetDTO> findByStatus(StatusReserve status){
-        List<Reserve> reserves = reserveRepository.findByStatus(status);
+    public List<ReserveGetDTO> findByStatus(String status){
+        StatusReserve statusReserve = null;
+        if (status.equalsIgnoreCase("Active")){
+            statusReserve = StatusReserve.ACTIVE;
+        }else if (status.equalsIgnoreCase("Cancel")){
+            statusReserve = StatusReserve.CANCEL;
+        }else {
+            throw new StatusInvalidException("ERRO! Status inválido.");
+        }
+
+        List<Reserve> reserves = reserveRepository.findByStatus(statusReserve);
 
         if (reserves.isEmpty()){
             return List.of();

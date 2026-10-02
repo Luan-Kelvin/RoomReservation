@@ -31,6 +31,7 @@ public class Conversor {
 
     public ReserveGetDTO converterReserve(Reserve reserve){
         return new ReserveGetDTO(
+            reserve.getId(),
             reserve.getNumber(),
             reserve.getStartReservation(),
             reserve.getEndReservation(),
