@@ -4,10 +4,7 @@ import com.Projeto_Alura.RoomReservation.DTOs.Room.RoomGetDTO;
 import com.Projeto_Alura.RoomReservation.Service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,16 +32,16 @@ public class RoomGetController {
         return ResponseEntity.ok().body(roomService.findByNumber(number));
     }
 
-    @GetMapping("/creation-date/{date}")
-    public ResponseEntity<List<RoomGetDTO>> findByCreationDate(@PathVariable("date") String date){
+    @GetMapping("/creation-date")
+    public ResponseEntity<List<RoomGetDTO>> findByCreationDate(@RequestParam String date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         return ResponseEntity.ok().body(roomService.findByCreationDate(LocalDate.parse(date, formatter)));
     }
 
-    @GetMapping("/creation-date-between/{startDate}/{endDate}")
+    @GetMapping("/creation-date-between")
     public ResponseEntity<List<RoomGetDTO>> findByCreationDateBetween(
-            @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate
+            @RequestParam String startDate, @RequestParam String endDate
     ){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

@@ -53,7 +53,7 @@ public class RoomService {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RoomNotFoundException(String.format("ERRO! Sala com ID %s não foi encontrada.", id)));
 
-        return  conversor.converterRoom(room);
+        return conversor.converterRoom(room);
     }
 
     @Transactional
