@@ -9,6 +9,6 @@ public class RoomReservationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RoomReservationApplication.class, args);
 	}
-	// criar metodo para cancelar a reserva quando passar da data de encerramento ec riar os controllers.git
+	// Usar ReflectionTestUtils parar testar metodos de delete de resrva
 
 }

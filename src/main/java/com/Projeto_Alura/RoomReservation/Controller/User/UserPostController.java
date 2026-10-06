@@ -3,6 +3,7 @@ package com.Projeto_Alura.RoomReservation.Controller.User;
 import com.Projeto_Alura.RoomReservation.DTOs.User.UserGetDTO;
 import com.Projeto_Alura.RoomReservation.DTOs.User.UserPostDTO;
 import com.Projeto_Alura.RoomReservation.Service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class UserPostController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserGetDTO> createUser(@RequestBody UserPostDTO dto){
+    public ResponseEntity<UserGetDTO> createUser(@RequestBody @Valid UserPostDTO dto){
         UserGetDTO user = userService.createUser(dto);
 
         URI location = ServletUriComponentsBuilder

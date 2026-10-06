@@ -3,6 +3,7 @@ package com.Projeto_Alura.RoomReservation.Domain;
 import com.Projeto_Alura.RoomReservation.ENUM.StatusRoom;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotNull
     @Column(unique = true)
     private Integer number;
 

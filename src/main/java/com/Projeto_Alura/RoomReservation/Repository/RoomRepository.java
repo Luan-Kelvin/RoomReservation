@@ -2,6 +2,8 @@ package com.Projeto_Alura.RoomReservation.Repository;
 
 import com.Projeto_Alura.RoomReservation.Domain.Room;
 import com.Projeto_Alura.RoomReservation.ENUM.StatusRoom;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,10 +18,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Optional<Room> findByNumber(Integer number);
 
-    List<Room> findByCreationDate(LocalDate creationDate);
+    Page<Room> findByCreationDate(LocalDate creationDate, Pageable pageable);
 
-    List<Room> findByCreationDateBetween(LocalDate startDate, LocalDate endDate);
+    Page<Room> findByCreationDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
 
-    List<Room> findByStatus(StatusRoom status);
+    Page<Room> findByStatus(StatusRoom status, Pageable pageable);
 
 }

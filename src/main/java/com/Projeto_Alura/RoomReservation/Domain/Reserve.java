@@ -4,6 +4,7 @@ import com.Projeto_Alura.RoomReservation.ENUM.StatusReserve;
 import com.Projeto_Alura.RoomReservation.Exceptions.InvalidReservationsDateException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class Reserve {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotNull
     private Integer number;
 
     private LocalDate startReservation;

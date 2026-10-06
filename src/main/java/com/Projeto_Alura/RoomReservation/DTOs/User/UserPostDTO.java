@@ -1,15 +1,12 @@
 package com.Projeto_Alura.RoomReservation.DTOs.User;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 public record UserPostDTO(
         @NotBlank
         String name,
 
-        @NotBlank
+        @NotNull
         @Min(18)
         Integer age,
 

@@ -3,13 +3,13 @@ package com.Projeto_Alura.RoomReservation.Controller.User;
 import com.Projeto_Alura.RoomReservation.DTOs.User.UserGetDTO;
 import com.Projeto_Alura.RoomReservation.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -20,8 +20,9 @@ public class UserGetController {
 
     // LISTAR TODOS OS USUÁRIOS CADASTRADOS.
     @GetMapping
-    public ResponseEntity<List<UserGetDTO>> listUser(){
-        return ResponseEntity.ok().body(userService.listUser());
+    public ResponseEntity<Page<UserGetDTO>> listUser(Pageable pageable){
+
+        return ResponseEntity.ok().body(userService.listUser(pageable));
     }
 
     // BUSCAR USUÁRIO PELO CPF

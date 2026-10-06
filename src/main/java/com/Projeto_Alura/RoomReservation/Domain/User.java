@@ -2,10 +2,7 @@ package com.Projeto_Alura.RoomReservation.Domain;
 
 import com.Projeto_Alura.RoomReservation.Exceptions.MaximumNumberOfReservationsException;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +27,7 @@ public class User {
     @Pattern(regexp = "^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$", message = "ERRO! CPF inválido para cadastro.")
     private String cpf;
 
-    @NotBlank
+    @NotNull
     @Min(18)
     private Integer age;
 
