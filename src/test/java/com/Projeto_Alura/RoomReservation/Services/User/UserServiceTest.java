@@ -15,6 +15,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -74,15 +78,20 @@ public class UserServiceTest {
 
         List<User> list = List.of(user1, user2, user3);
 
-        when(userRepository.findAll()).thenReturn(list);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<User> page = new PageImpl<>(list);
+
+        when(userRepository.findAll(pageable)).thenReturn(page);
         when(conversor.converterUser(any(User.class))).thenReturn(
                 new UserGetDTO(1L, "Joaquim", 19, "jojo@gmail.com"),
                 new UserGetDTO(2L, "mario", 29, "mario@gmail.com"),
                 new UserGetDTO(3L, "Naldo", 29, "naldo@gmail.com"));
 
-        List<UserGetDTO> listDTO = userService.listUser();
 
-        assertEquals(listDTO.size(), list.size());
+        Page<UserGetDTO> pageDTO = userService.listUser(pageable);
+
+        assertEquals(pageDTO.getContent().size(), list.size());
 
         verify(userRepository).findAll();
         verify(conversor, times(3)).converterUser(any(User.class));

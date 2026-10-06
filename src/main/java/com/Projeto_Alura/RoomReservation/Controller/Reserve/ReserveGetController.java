@@ -3,12 +3,13 @@ package com.Projeto_Alura.RoomReservation.Controller.Reserve;
 import com.Projeto_Alura.RoomReservation.DTOs.Reserve.ReserveGetDTO;
 import com.Projeto_Alura.RoomReservation.Service.ReserveService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @RestController
 @RequestMapping("/reserve")
@@ -23,15 +24,15 @@ public class ReserveGetController {
     }
 
     @GetMapping("/start_reservation")
-    public ResponseEntity<List<ReserveGetDTO>> findByStartReservation(@RequestParam String date){
+    public ResponseEntity<Page<ReserveGetDTO>> findByStartReservation(@RequestParam String date, Pageable pageable){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        return ResponseEntity.ok().body(reserveService.findByStartReservation(LocalDate.parse(date, formatter)));
+        return ResponseEntity.ok().body(reserveService.findByStartReservation(LocalDate.parse(date, formatter), pageable));
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<ReserveGetDTO>> findByStatus(@RequestParam String status){
-        return ResponseEntity.ok().body(reserveService.findByStatus(status));
+    public ResponseEntity<Page<ReserveGetDTO>> findByStatus(@RequestParam String status, Pageable pageable){
+        return ResponseEntity.ok().body(reserveService.findByStatus(status, pageable));
     }
 
     @GetMapping("/id/{id}")

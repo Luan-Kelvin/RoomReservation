@@ -14,6 +14,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -125,25 +129,29 @@ public class RoomServiceTest {
     void deveRetornarListaDeRoons(){
         Room room1 = new Room(1001);
         Room room2 = new Room(1002);
-        Room room3 = new Room(1002);
+        Room room3 = new Room(1003);
         List<Room> list = List.of(room1, room2, room3);
 
-        when(roomRepository.findAll()).thenReturn(list);
+        Page<Room> page = new PageImpl<>(list);
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        when(roomRepository.findAll(pageable)).thenReturn(page);
         when(conversor.converterRoom(any(Room.class)))
                 .thenReturn(
                         new RoomGetDTO(1L, room1.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE),
                         new RoomGetDTO(2L, room2.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE),
                         new RoomGetDTO(3L, room3.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE));
 
-        List<RoomGetDTO> listDTO = roomService.listRoons();
+        Page<RoomGetDTO> pageDTO = roomService.listRoons(pageable);
 
-        assertEquals(listDTO.size(), list.size());
+        assertEquals(pageDTO.getContent().size(), list.size());
 
-        assertEquals(listDTO.get(0).number(), list.get(0).getNumber());
-        assertEquals(listDTO.get(1).number(), list.get(1).getNumber());
-        assertEquals(listDTO.get(2).number(), list.get(2).getNumber());
+        assertEquals(pageDTO.getContent().get(0).number(), list.get(0).getNumber());
+        assertEquals(pageDTO.getContent().get(1).number(), list.get(1).getNumber());
+        assertEquals(pageDTO.getContent().get(2).number(), list.get(2).getNumber());
 
-        verify(roomRepository).findAll();
+        verify(roomRepository).findAll(pageable);
         verify(conversor, times(3)).converterRoom(any(Room.class));
     }
 
@@ -172,22 +180,26 @@ public class RoomServiceTest {
         Room room3 = new Room(1002);
         List<Room> list = List.of(room1, room2, room3);
 
-        when(roomRepository.findByCreationDate(LocalDate.now())).thenReturn(list);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<Room> page = new PageImpl<>(list);
+
+        when(roomRepository.findByCreationDate(LocalDate.now(), pageable)).thenReturn(page);
         when(conversor.converterRoom(any(Room.class)))
                 .thenReturn(
                         new RoomGetDTO(1L, room1.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE),
                         new RoomGetDTO(2L, room2.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE),
                         new RoomGetDTO(3L, room3.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE));
 
-        List<RoomGetDTO> listDTO = roomService.findByCreationDate(LocalDate.now());
+        Page<RoomGetDTO> pageDTO = roomService.findByCreationDate(LocalDate.now(), pageable);
 
-        assertEquals(listDTO.size(), list.size());
+        assertEquals(pageDTO.getContent().size(), list.size());
 
-        assertEquals(listDTO.get(0).number(), list.get(0).getNumber());
-        assertEquals(listDTO.get(1).number(), list.get(1).getNumber());
-        assertEquals(listDTO.get(2).number(), list.get(2).getNumber());
+        assertEquals(pageDTO.getContent().get(0).number(), list.get(0).getNumber());
+        assertEquals(pageDTO.getContent().get(1).number(), list.get(1).getNumber());
+        assertEquals(pageDTO.getContent().get(2).number(), list.get(2).getNumber());
 
-        verify(roomRepository).findByCreationDate(LocalDate.now());
+        verify(roomRepository).findByCreationDate(LocalDate.now(), pageable);
         verify(conversor, times(3)).converterRoom(any(Room.class));
     }
 
@@ -199,22 +211,26 @@ public class RoomServiceTest {
         Room room3 = new Room(1002);
         List<Room> list = List.of(room1, room2, room3);
 
-        when(roomRepository.findByStatus(StatusRoom.AVAILABLE)).thenReturn(list);
+        Page<Room> page = new PageImpl<>(list);
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        when(roomRepository.findByStatus(StatusRoom.AVAILABLE, pageable)).thenReturn(page);
         when(conversor.converterRoom(any(Room.class)))
                 .thenReturn(
                         new RoomGetDTO(1L, room1.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE),
                         new RoomGetDTO(2L, room2.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE),
                         new RoomGetDTO(3L, room3.getNumber(), LocalDate.now(), StatusRoom.AVAILABLE));
 
-        List<RoomGetDTO> listDTO = roomService.findByStatus("available");
+        Page<RoomGetDTO> pageDTO = roomService.findByStatus("available", pageable);
 
-        assertEquals(listDTO.size(), list.size());
+        assertEquals(pageDTO.getContent().size(), list.size());
 
-        assertEquals(listDTO.get(0).number(), list.get(0).getNumber());
-        assertEquals(listDTO.get(1).number(), list.get(1).getNumber());
-        assertEquals(listDTO.get(2).number(), list.get(2).getNumber());
+        assertEquals(pageDTO.getContent().get(0).number(), list.get(0).getNumber());
+        assertEquals(pageDTO.getContent().get(1).number(), list.get(1).getNumber());
+        assertEquals(pageDTO.getContent().get(2).number(), list.get(2).getNumber());
 
-        verify(roomRepository).findByStatus(StatusRoom.AVAILABLE);
+        verify(roomRepository).findByStatus(StatusRoom.AVAILABLE, pageable);
         verify(conversor, times(3)).converterRoom(any(Room.class));
     }
 }

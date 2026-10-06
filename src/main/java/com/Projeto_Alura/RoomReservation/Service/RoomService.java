@@ -10,6 +10,8 @@ import com.Projeto_Alura.RoomReservation.Repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,14 +59,14 @@ public class RoomService {
     }
 
     @Transactional
-    public List<RoomGetDTO> listRoons(){
-        List<Room> roons = roomRepository.findAll();
+    public Page<RoomGetDTO> listRoons(Pageable pageable){
+        Page<Room> roons = roomRepository.findAll(pageable);
 
         if (roons.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return roons.stream().map(conversor::converterRoom).toList();
+        return roons.map(conversor::converterRoom);
     }
 
     @Transactional
@@ -76,29 +78,29 @@ public class RoomService {
     }
 
     @Transactional
-    public List<RoomGetDTO> findByCreationDate(LocalDate date){
-        List<Room> roons = roomRepository.findByCreationDate(date);
+    public Page<RoomGetDTO> findByCreationDate(LocalDate date, Pageable pageable){
+        Page<Room> roons = roomRepository.findByCreationDate(date, pageable);
 
         if (roons.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return roons.stream().map(conversor::converterRoom).toList();
+        return roons.map(conversor::converterRoom);
     }
 
     @Transactional
-    public List<RoomGetDTO> findByCreationDateBetween(LocalDate startDate, LocalDate endDate){
-        List<Room> roons = roomRepository.findByCreationDateBetween(startDate, endDate);
+    public Page<RoomGetDTO> findByCreationDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable){
+        Page<Room> roons = roomRepository.findByCreationDateBetween(startDate, endDate, pageable);
 
         if (roons.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return roons.stream().map(conversor::converterRoom).toList();
+        return roons.map(conversor::converterRoom);
     }
 
     @Transactional
-    public List<RoomGetDTO> findByStatus(String s){
+    public Page<RoomGetDTO> findByStatus(String s, Pageable pageable){
         StatusRoom status = null;
 
         if (s.equalsIgnoreCase("AVAILABLE")){
@@ -111,13 +113,13 @@ public class RoomService {
             throw new StatusInvalidException("ERRO! Status digitado é inválido.");
         }
 
-        List<Room> roons = roomRepository.findByStatus(status);
+        Page<Room> roons = roomRepository.findByStatus(status, pageable);
 
         if (roons.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return roons.stream().map(conversor::converterRoom).toList();
+        return roons.map(conversor::converterRoom);
     }
 
     public void save(Room room){

@@ -3,6 +3,8 @@ package com.Projeto_Alura.RoomReservation.Controller.Room;
 import com.Projeto_Alura.RoomReservation.DTOs.Room.RoomGetDTO;
 import com.Projeto_Alura.RoomReservation.Service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,8 @@ public class RoomGetController {
     private final RoomService roomService;
 
     @GetMapping
-    public ResponseEntity<List<RoomGetDTO>> listRoons(){
-        return ResponseEntity.ok().body(roomService.listRoons());
+    public ResponseEntity<Page<RoomGetDTO>> listRoons(Pageable pageable){
+        return ResponseEntity.ok().body(roomService.listRoons(pageable));
     }
 
     @GetMapping("id/{id}")
@@ -32,28 +34,28 @@ public class RoomGetController {
         return ResponseEntity.ok().body(roomService.findByNumber(number));
     }
 
-    @GetMapping("/creation-date")
-    public ResponseEntity<List<RoomGetDTO>> findByCreationDate(@RequestParam String date){
+    @GetMapping("/creation_date")
+    public ResponseEntity<Page<RoomGetDTO>> findByCreationDate(@RequestParam String date, Pageable pageable){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        return ResponseEntity.ok().body(roomService.findByCreationDate(LocalDate.parse(date, formatter)));
+        return ResponseEntity.ok().body(roomService.findByCreationDate(LocalDate.parse(date, formatter),pageable));
     }
 
-    @GetMapping("/creation-date-between")
-    public ResponseEntity<List<RoomGetDTO>> findByCreationDateBetween(
-            @RequestParam String startDate, @RequestParam String endDate
+    @GetMapping("/creation_date_between")
+    public ResponseEntity<Page<RoomGetDTO>> findByCreationDateBetween(
+            @RequestParam String startDate, @RequestParam String endDate, Pageable pageable
     ){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         LocalDate start = LocalDate.parse(startDate, formatter);
         LocalDate end = LocalDate.parse(endDate, formatter);
 
-        return ResponseEntity.ok().body(roomService.findByCreationDateBetween(start, end));
+        return ResponseEntity.ok().body(roomService.findByCreationDateBetween(start, end, pageable));
     }
 
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<RoomGetDTO>> findByStatus(@PathVariable("status") String status){
-        return ResponseEntity.ok().body(roomService.findByStatus(status));
+    @GetMapping("/status")
+    public ResponseEntity<Page<RoomGetDTO>> findByStatus(@RequestParam String status, Pageable pageable){
+        return ResponseEntity.ok().body(roomService.findByStatus(status, pageable));
     }
 
 

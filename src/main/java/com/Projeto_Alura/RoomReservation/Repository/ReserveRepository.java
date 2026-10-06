@@ -2,6 +2,8 @@ package com.Projeto_Alura.RoomReservation.Repository;
 
 import com.Projeto_Alura.RoomReservation.Domain.Reserve;
 import com.Projeto_Alura.RoomReservation.ENUM.StatusReserve;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,9 +18,9 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
 
     Optional<Reserve> findByNumber(Integer number);
 
-    List<Reserve> findByStartReservation(LocalDate date);
+    Page<Reserve> findByStartReservation(LocalDate date, Pageable pageable);
 
-    List<Reserve> findByStatus(StatusReserve status);
+    Page<Reserve> findByStatus(StatusReserve status, Pageable pageable);
 
 
 

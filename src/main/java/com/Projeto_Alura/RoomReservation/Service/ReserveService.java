@@ -14,6 +14,8 @@ import com.Projeto_Alura.RoomReservation.Repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,7 @@ public class ReserveService {
         User user = userService.findById(reserve.getUser().getId());
         Room room = roomService.findById(reserve.getRoom().getId());
 
+
         user.removeReserve(reserve);
         room.removeReserve();
         reserveRepository.delete(reserve);
@@ -87,18 +90,18 @@ public class ReserveService {
     }
 
     @Transactional
-    public List<ReserveGetDTO> findByStartReservation(LocalDate date){
-        List<Reserve> reserves = reserveRepository.findByStartReservation(date);
+    public Page<ReserveGetDTO> findByStartReservation(LocalDate date, Pageable pageable){
+        Page<Reserve> reserves = reserveRepository.findByStartReservation(date, pageable);
 
         if (reserves.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return reserves.stream().map(conversor::converterReserve).toList();
+        return reserves.map(conversor::converterReserve);
     }
 
     @Transactional
-    public List<ReserveGetDTO> findByStatus(String status){
+    public Page<ReserveGetDTO> findByStatus(String status, Pageable pageable){
         StatusReserve statusReserve = null;
         if (status.equalsIgnoreCase("Active")){
             statusReserve = StatusReserve.ACTIVE;
@@ -108,12 +111,12 @@ public class ReserveService {
             throw new StatusInvalidException("ERRO! Status inválido.");
         }
 
-        List<Reserve> reserves = reserveRepository.findByStatus(statusReserve);
+        Page<Reserve> reserves = reserveRepository.findByStatus(statusReserve, pageable);
 
         if (reserves.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return reserves.stream().map(conversor::converterReserve).toList();
+        return reserves.map(conversor::converterReserve);
     }
 }

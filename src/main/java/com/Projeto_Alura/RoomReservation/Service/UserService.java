@@ -10,6 +10,8 @@ import com.Projeto_Alura.RoomReservation.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,14 +34,14 @@ public class UserService {
     }
 
     @Transactional
-    public List<UserGetDTO> listUser(){
-        List<User> users = userRepository.findAll();
+    public Page<UserGetDTO> listUser(Pageable pageable){
+        Page<User> users = userRepository.findAll(pageable);
 
         if (users.isEmpty()){
-            return List.of();
+            return Page.empty();
         }
 
-        return users.stream().map(conversor::converterUser).toList();
+        return users.map(conversor::converterUser);
     }
 
     @Transactional
