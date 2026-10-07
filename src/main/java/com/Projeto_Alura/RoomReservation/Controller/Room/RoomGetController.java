@@ -29,7 +29,7 @@ public class RoomGetController {
         return ResponseEntity.ok().body(roomService.findByIdController(id));
     }
 
-    @GetMapping("/numer/{number}")
+    @GetMapping("/number/{number}")
     public ResponseEntity<RoomGetDTO> findByNumberRoom(@PathVariable("number") Integer number){
         return ResponseEntity.ok().body(roomService.findByNumber(number));
     }
